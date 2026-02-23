@@ -29,3 +29,39 @@ This project simulates the electronic and software control systems of a lead scr
 | Servo Signal | `GPIO 18` | PWM Control |
 | Servo VCC | `5V / VIN`| Ensure adequate power supply |
 | Servo GND | `GND` | |
+
+
+## 🚀 Setup & Installation
+
+Clone this repository and open it in VS Code with the PlatformIO extension.
+
+Open `main.cpp` (or your main sketch file) and update the WiFi credentials:
+
+```C++
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
+```
+
+(Optional) Tune the delay(150); inside the triggerSingleTick() function to calibrate the physical volume dispensed by your specific lead screw pitch.
+
+Build and upload to your ESP32.
+
+Open the Serial Monitor at 115200 baud.
+
+Once connected to WiFi, the ESP32 will print its IP address. Navigate to this IP in any web browser on the same network.
+
+## ⚙️ How it Works under the Hood
+
+Time-based PWM: Because continuous rotation servos cannot go to a specific angle, the pump uses microsecond pulses (2000µs for forward, 1500µs for stop) for exactly 150ms to simulate a 0.05 Unit tick.
+
+State Machine: The loop() function handles the timing for both Bolus intervals (1-second gaps) and Basal intervals (calculated via ms-per-hour) without using blocking delay() calls, keeping the web server fully responsive.
+
+Dirty Flag Saving: To protect the ESP32's flash memory from wear, reservoir updates are not written to memory on every tick. Instead, a stateDirty flag is triggered, and a background timer safely commits changes to NVS every 30 seconds.
+
+## Next steps
+
+- Replace the continuous rotation servo
+- Implement BLE interfaces
+- Fix the Saving logic
+- Implement physical interfaces and Screen
+- Evaluate possible integration with AAPS
