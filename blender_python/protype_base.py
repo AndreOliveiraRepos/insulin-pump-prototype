@@ -29,19 +29,9 @@ def generate_prototyping_base(export_dir):
     base.name = "Prototyping_Base"
     base.scale = (0.085, 0.070, 0.004) 
     base.location = (0.0025, 0.010, -0.002) 
-    
-    # ==========================================
-    # 2. CENTRAL GEAR AXLE
-    # ==========================================
-    bpy.ops.mesh.primitive_cylinder_add(
-        vertices=64, radius=0.00135, depth=0.012, location=(0, 0, 0.006)
-    )
-    axle = bpy.context.active_object
-    axle.name = "Gear_Axle"
-    apply_boolean(base, axle, 'UNION')
 
     # ==========================================
-    # 3. RACK SLIDE CHANNEL
+    # 2. RACK SLIDE CHANNEL
     # ==========================================
     # Rear thrust wall
     bpy.ops.mesh.primitive_cube_add(size=1)
@@ -64,7 +54,7 @@ def generate_prototyping_base(export_dir):
     apply_boolean(base, front_right, 'UNION')
 
     # ==========================================
-    # 4. MOTOR MOUNT BLOCK & CAVITY
+    # 3. MOTOR MOUNT BLOCK & CAVITY
     # ==========================================
     bpy.ops.mesh.primitive_cube_add(size=1)
     motor_block = bpy.context.active_object
@@ -86,21 +76,32 @@ def generate_prototyping_base(export_dir):
     apply_boolean(base, bpy.context.active_object, 'DIFFERENCE')
 
     # ==========================================
-    # 5. GEAR ROTATION CLEARANCES (THE FIX)
+    # 4. GEAR ROTATION CLEARANCES (NEGATIVE CUTS)
     # ==========================================
-    # A. Pinion Relief Recess: A 2mm deep pocket giving the gear teeth a frictionless air gap.
+    # A. Pinion Relief Recess
     bpy.ops.mesh.primitive_cylinder_add(
         vertices=64, radius=0.010, depth=0.004, location=(0, 0, 0)
     )
     pinion_recess = bpy.context.active_object
     apply_boolean(base, pinion_recess, 'DIFFERENCE')
 
-    # B. Worm Wheel Clearance: Bites a massive 22.5mm chunk out of the motor block so the wheel can spin.
+    # B. Worm Wheel Clearance
     bpy.ops.mesh.primitive_cylinder_add(
         vertices=64, radius=0.0225, depth=0.020, location=(0, 0, 0.015)
     )
     wheel_clearance = bpy.context.active_object
     apply_boolean(base, wheel_clearance, 'DIFFERENCE')
+
+    # ==========================================
+    # 5. CENTRAL GEAR AXLE (THE FIX: ADDED LAST)
+    # ==========================================
+    # Now that the pocket is carved out, we build the axle from the floor of the pocket up.
+    bpy.ops.mesh.primitive_cylinder_add(
+        vertices=64, radius=0.00135, depth=0.014, location=(0, 0, 0.005)
+    )
+    axle = bpy.context.active_object
+    axle.name = "Gear_Axle"
+    apply_boolean(base, axle, 'UNION')
 
     # ==========================================
     # 6. FINAL EXPORT
@@ -114,7 +115,7 @@ def generate_prototyping_base(export_dir):
     bpy.ops.wm.stl_export(
         filepath=filepath, export_selected_objects=True, global_scale=1.0, apply_modifiers=True
     )
-    print(f"Success! Clearance pockets carved. Base exported to: {filepath}")
+    print(f"Success! Axle anchored firmly. Base exported to: {filepath}")
 
 # ==========================================
 # EXECUTION
