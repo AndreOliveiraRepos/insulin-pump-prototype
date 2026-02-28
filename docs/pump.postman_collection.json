@@ -1,0 +1,225 @@
+{
+	"info": {
+		"_postman_id": "46330bcf-4cab-4a99-9d3f-ed3e815756cb",
+		"name": "ESP32 AndroidAPS Pump Simulator",
+		"description": "REST API testing suite for the ESP32 insulin pump prototype.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1395799"
+	},
+	"item": [
+		{
+			"name": "1. GET Device Info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{ESP_IP}}/api/device/info",
+					"protocol": "http",
+					"host": [
+						"{{ESP_IP}}"
+					],
+					"path": [
+						"api",
+						"device",
+						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. GET Device Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{ESP_IP}}/api/device/status",
+					"protocol": "http",
+					"host": [
+						"{{ESP_IP}}"
+					],
+					"path": [
+						"api",
+						"device",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. POST Beep (Hardware Test)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"beepType\": \"BOLUS_START\",\n  \"volumeLevel\": 5,\n  \"commandId\": \"test_beep_001\"\n}"
+				},
+				"url": {
+					"raw": "http://{{ESP_IP}}/api/command/beep",
+					"protocol": "http",
+					"host": [
+						"{{ESP_IP}}"
+					],
+					"path": [
+						"api",
+						"command",
+						"beep"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. POST Deliver Bolus",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"units\": 2.5,\n  \"rate\": 0.025,\n  \"commandId\": \"bolus_test_001\"\n}"
+				},
+				"url": {
+					"raw": "http://{{ESP_IP}}/api/command/bolus",
+					"protocol": "http",
+					"host": [
+						"{{ESP_IP}}"
+					],
+					"path": [
+						"api",
+						"command",
+						"bolus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. POST Suspend Delivery",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"commandId\": \"suspend_test_001\"\n}"
+				},
+				"url": {
+					"raw": "http://{{ESP_IP}}/api/command/suspend",
+					"protocol": "http",
+					"host": [
+						"{{ESP_IP}}"
+					],
+					"path": [
+						"api",
+						"command",
+						"suspend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6. POST Resume Delivery",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"commandId\": \"resume_test_001\"\n}"
+				},
+				"url": {
+					"raw": "http://{{ESP_IP}}/api/command/resume",
+					"protocol": "http",
+					"host": [
+						"{{ESP_IP}}"
+					],
+					"path": [
+						"api",
+						"command",
+						"resume"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7. POST Set Temp Basal",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"rate\": 1.5,\n  \"durationMinutes\": 30,\n  \"commandId\": \"temp_basal_001\"\n}"
+				},
+				"url": {
+					"raw": "http://{{ESP_IP}}/api/command/temp-basal",
+					"protocol": "http",
+					"host": [
+						"{{ESP_IP}}"
+					],
+					"path": [
+						"api",
+						"command",
+						"temp-basal"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ESP_IP",
+			"value": "192.168.0.151",
+			"type": "string"
+		}
+	]
+}
